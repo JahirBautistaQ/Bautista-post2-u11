@@ -9,7 +9,10 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(boolean activo, int score, double limiteCredito) {
+    public Cliente(boolean activo,
+                    int score,
+                    double limiteCredito) {
+
         this.activo = activo;
         this.score = score;
         this.limiteCredito = limiteCredito;
@@ -19,23 +22,11 @@ public class Cliente {
         return activo;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
     public int getScore() {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public double getLimiteCredito() {
         return limiteCredito;
-    }
-
-    public void setLimiteCredito(double limiteCredito) {
-        this.limiteCredito = limiteCredito;
     }
 }

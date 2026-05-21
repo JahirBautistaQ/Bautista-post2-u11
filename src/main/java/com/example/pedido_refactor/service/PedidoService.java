@@ -119,7 +119,8 @@ public class PedidoService {
             default:
                 throw new IllegalArgumentException(
                         "Tipo de envio desconocido: "
-                                + tipoEnvio);
+                                + tipoEnvio
+                );
         }
     }
 
