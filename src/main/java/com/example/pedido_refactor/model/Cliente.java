@@ -10,8 +10,8 @@ public class Cliente {
     }
 
     public Cliente(boolean activo,
-                    int score,
-                    double limiteCredito) {
+                   int score,
+                   double limiteCredito) {
 
         this.activo = activo;
         this.score = score;

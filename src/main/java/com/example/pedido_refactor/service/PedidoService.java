@@ -30,14 +30,21 @@ public class PedidoService {
                                  boolean esUrgente,
                                  String codigoDescuento) {
 
-        double total = calcularTotal(productosIds, cantidades);
+        double total =
+                calcularTotal(
+                        productosIds,
+                        cantidades
+                );
 
         if (total == -1) {
             return "ERROR_PRODUCTO";
         }
 
         double totalConDescuento =
-                aplicarDescuento(total, codigoDescuento);
+                aplicarDescuento(
+                        total,
+                        codigoDescuento
+                );
 
         notificacionService.notificarPedido(
                 datosCliente,
@@ -59,13 +66,17 @@ public class PedidoService {
         for (int i = 0; i < productosIds.size(); i++) {
 
             Producto producto =
-                    repo.findProductoById(productosIds.get(i));
+                    repo.findProductoById(
+                            productosIds.get(i)
+                    );
 
             if (producto == null) {
                 return -1;
             }
 
-            total += producto.getPrecio() * cantidades.get(i);
+            total +=
+                    producto.getPrecio()
+                            * cantidades.get(i);
         }
 
         return total;
@@ -98,53 +109,23 @@ public class PedidoService {
         return "OK_" + repo.save(pedido).getId();
     }
 
-    // Switch Statement smell — CC = 5
-    public double calcularEnvio(Pedido pedido,
-                                String tipoEnvio) {
+    // ==============================
+    // GUARD CLAUSES REFACTOR
+    // ==============================
 
-        switch (tipoEnvio) {
-
-            case "ESTANDAR":
-                return pedido.getTotal() > 50 ? 0 : 5.99;
-
-            case "EXPRESS":
-                return 12.99;
-
-            case "MISMO_DIA":
-                return 24.99;
-
-            case "GRATIS":
-                return 0;
-
-            default:
-                throw new IllegalArgumentException(
-                        "Tipo de envio desconocido: "
-                                + tipoEnvio
-                );
-        }
-    }
-
-    // Arrow code — CC = 6
     public String aprobarCredito(Cliente c,
                                  double monto) {
 
-        if (c != null) {
+        if (c == null) return "RECHAZADO";
 
-            if (c.isActivo()) {
+        if (!c.isActivo()) return "RECHAZADO";
 
-                if (c.getScore() >= 600) {
+        if (c.getScore() < 600) return "RECHAZADO";
 
-                    if (monto > 0) {
+        if (monto <= 0) return "RECHAZADO";
 
-                        if (monto <= c.getLimiteCredito()) {
+        if (monto > c.getLimiteCredito()) return "RECHAZADO";
 
-                            return "APROBADO";
-                        }
-                    }
-                }
-            }
-        }
-
-        return "RECHAZADO";
+        return "APROBADO";
     }
 }
